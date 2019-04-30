@@ -1,0 +1,176 @@
+html, body {
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	font:16px/18px Arial;
+	color:#808285;
+}
+
+body {
+	min-width: 1012px;
+	min-height:1080px;
+	background:url(images/bg.jpg) no-repeat left top;
+	
+}
+form {
+	padding: 0px;
+	margin: 0px;
+}
+img {
+	border: none;
+}
+p {
+	padding:0;
+	margin: 0;
+}
+h1{
+	margin:0;
+	padding:0 0 10px 0;
+	color:#000;
+	font:33px/40px Arial;
+}
+h2,h3,h4,h5{
+	margin:0;
+	padding:0 0 10px 0;
+	color:#000;
+}
+h2{	font:30px/35px Arial;}
+h3{	font:27px/30px Arial;}
+h4,h5{font:24px/25px Arial;}
+
+a{
+	font:12px/18px Arial;
+	color:#000;
+	text-decoration:underline;
+}
+a:hover{
+	text-decoration:none;
+}
+.bg1 {color:#ffc80b;}
+.bg2 {color:#ed1c24;}
+.bg3 {color:#f6861f;}
+.bg4 {color:#ee3d97;}
+.bg5 {color:#009a4e;}
+.bg6 {color:#16bbab;}
+.bg7 {color:#0077c1;}
+
+#text p,
+#page-text p{
+	padding: 0 0 10px 0;
+}
+#text ul, #text ol, #page-text ol,
+#page-text ul{
+	margin:0;
+	padding:5px 0 5px 15px;
+}
+#text ul li,
+#page-text ul li{
+	
+}
+#text img,
+#page-text img{
+	
+}
+#text table tr td{
+	vertical-align:top;
+}
+#wrapper {
+	width: 1002px;
+	margin: 0 auto;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	outline:0px solid red;
+}
+
+/* backgrounds */
+
+.logo{
+	margin:26px 33px;
+	display:inline-block;
+}
+
+.int_but{
+	float:right;
+	margin:28px 39px;
+}
+
+.slider{
+	margin:-10px -33px;
+}
+
+.banners{
+	margin-top:5px;
+}
+
+.footer{
+	width:994px;
+	height: 345px;
+	border:0px solid red;
+	margin-left:3px;
+}
+
+.textbox1{
+	font:24px Myriad Pro;
+	color:#a2a2ae;
+	margin:22px 23px;
+}
+
+.textbox2{
+	float:right;
+	font:24px Myriad Pro;
+	color:#a2a2ae;
+	margin:-22px 44px;
+	text-transform: uppercase;
+}
+
+.arrow{
+	width:1012px;
+	height:3px;
+	background:url(images/arrow.png) no-repeat left top;
+	margin:34px -15px;
+}
+
+.fmtitle{
+	font:25px Myriad Pro;
+	color:white;
+	padding-bottom:9px;
+}
+
+.inputbg{
+	background:url(images/input_text.png) no-repeat left top;
+	width:211px;
+	height:25px;
+	padding-bottom:13px;
+	padding-right:12px;
+}
+
+.inputbg input{
+	border:none;
+	width: 200px;
+	margin-left:5px;
+	background-color:#242439;
+	font:13px Myriad Pro;
+	color:white;
+}
+
+.textarea1{
+	background:url(images/textarea1.png) no-repeat left top;
+	width:190px;
+	height:104px;
+
+}
+
+.textarea1 textarea{
+	border:none;
+	width: 178px;
+	height:94px;
+	margin-left:5px;
+	margin-top:-5px;
+	background-color:#242439;
+}
+
+.copyright{
+	font:14px Myriad Pro;
+	color:white;
+}

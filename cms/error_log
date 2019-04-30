@@ -1,0 +1,2 @@
+[26-Nov-2014 17:04:17 America/New_York] PHP Warning:  imagejpeg(): gd-jpeg: JPEG library reports unrecoverable error:  in /home/franckpr/public_html/cms/img.php on line 68
+[26-Nov-2014 17:12:47 America/New_York] PHP Warning:  imagejpeg(): gd-jpeg: JPEG library reports unrecoverable error:  in /home/franckpr/public_html/cms/img.php on line 68

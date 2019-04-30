@@ -1,0 +1,14 @@
+Options -Indexes
+RewriteEngine On
+
+##############################
+RewriteRule   ^((\w+)/)?news/((\d+)/)?$ news.php?lang=$2&id=$4
+RewriteRule   ^((\w+)/)?news/p/((\d+)/)/?$ news.php?lang=$2&pg=$4
+RewriteRule   ^((\w+)/)?action/((\d+)/)?$ action.php?lang=$2&id=$4
+RewriteRule   ^((\w+)/)?action/p/((\d+)/)?$ action.php?lang=$2&pg=$4
+RewriteRule   ^((\w+)/)?gallery/((\d+)/)$ gallery.php?lang=$2&id=$4
+RewriteRule   ^((\w+)/)?vgallery/((\d+)/)$ vgallery.php?lang=$2&id=$4
+RewriteRule   ^((\w+)/)?guest/((\d+)/)$ guest.php?lang=$2&pg=$4
+RewriteRule   ^((\w+)/)?pages/(\d+)(_(\d+))?\.html$ page.php?lang=$2&id=$3&pg=$5
+RewriteRule   ^(ru|en|kz)/$ index.php?lang=$1
+RewriteRule   ^(ru|en|kz)/(\w+)/$ $2.php?lang=$1

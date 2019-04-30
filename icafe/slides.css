@@ -1,0 +1,46 @@
+#products_example {
+	width:250px;
+	position:relative;
+	float:left;
+}
+
+#products {
+	
+}
+
+#products .slides_container {
+	width:250px;
+	height:400px;
+	overflow:hidden;
+	position:relative;
+	border:0px solid #dfdfdf;
+}
+
+#products .pagination {
+	width:250px;
+	padding:5px 0;
+	list-style:none;
+}
+
+#products .pagination li {
+
+	margin:0 6px 5px 0;
+	float:left;
+}
+#products .pagination li:last-child{
+	margin:0;
+}
+#products .pagination li a {
+	display:block;
+	width:77px;
+	height:114px;
+	overflow:hidden;
+	float:left;
+	border:1px solid #a9aaad;
+	outline:0;
+}
+
+#products .pagination li.current a {
+	border:1px solid #d8d8da;
+}
+
