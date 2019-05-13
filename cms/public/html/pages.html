@@ -28,6 +28,7 @@ gtag('config', 'UA-121631617-1');
 			<img class="basket" src="/images/shopping-bag.svg" alt="" />
 			<h3><a href="/ru/rycle/" style="text-decoration: none;">Корзина</a></h3>
 			<span class="number"><span><?=(isset($_SESSION['rycle'])?count($_SESSION['rycle']):'0')?></span> ед.</span>
+			<span class="sum">Сумма <span><?=(isset($_SESSION['Сумма']) ? $_SESSION['Сумма'] : 0)?></span> тг </span>
 		</div>
 			
 		<div id="topmenubg"></div>

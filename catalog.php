@@ -10,57 +10,57 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 	<td width="155">
 		<hr class="dotted" />
 		<!--#cat_menu#-->
-		<hr class="dotted" />
-		<div id="searchincat">Поиск в каталоге</div>
-		<form id="searchincat_form" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
-			<div id="searchincat_input">
-				<input type="text" name="code" value="<?=(!empty($_POST['code']) ? $api->db->prepare($_POST['code']) : 'по номеру товара')?>" title="по номеру товара" class="needClear" />
-				<input type="submit" value="" />
-			</div>
-		</form>
 	</td>
 
 	<td style="padding-left:15px;">
-        <form style="width: 30%; float: right;" id="brand_filter_form" action="<?=$_SERVER['PHP_SELF']?>" method="GET">
-            <?=((!empty($_GET['cat']) && is_numeric($_GET['cat'])) ? '<input type="hidden" name="cat" value="'.intval($_GET['cat']).'" />':'')?>
-            <select id="brand_select" name="brand" onchange="$('#brand_filter_form').submit()">
-                <option value="all">Все брэнды</option>
-                <?
-                # ФИЛЬТРАЦИЯ ПО БРЭНДАМ
+        <div class="forms" style="margin-top: 10px">
+            <form id="searchincat_form" style="width: 30%; float: left;" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+                <div id="searchincat_input">
+                    <input type="text" name="code" value="<?=(!empty($_POST['code']) ? $api->db->prepare($_POST['code']) : 'Поиск по товарам')?>" title="Поиск по товарам" class="needClear" />
+                    <input type="submit" value="" />
+                </div>
+            </form>
+            <form style="width: 30%; float: right;" id="brand_filter_form" action="<?=$_SERVER['PHP_SELF']?>" method="GET">
+                <?=((!empty($_GET['cat']) && is_numeric($_GET['cat'])) ? '<input type="hidden" name="cat" value="'.intval($_GET['cat']).'" />':'')?>
+                <select id="brand_select" name="brand" onchange="$('#brand_filter_form').submit()">
+                    <option value="all">Все брэнды</option>
+                    <?
+                    # ФИЛЬТРАЦИЯ ПО БРЭНДАМ
 
-                if (!empty($_GET['cat'])) {
-                    $brands = [];
-                    $products = $api->objects->getFullObjectsListByClass($_GET['cat'], 12);
-                    foreach ($products as $product) {
-                        $brands[] = $product['Брэнд'];
-                    }
-
-                    $brands = array_unique($brands);
-                }
-
-
-
-                if (!empty($brands))
-                {
-                    $out = array();
-                    foreach($brands as $v)
-                    {
-                        $selected = false;
-
-                        # Сравнение брэнда
-                        if (!empty($_GET['brand']) && ($_GET['brand'] == $v))
-                        {
-                            $selected = true;
-                            $brand = $v;
+                    if (!empty($_GET['cat'])) {
+                        $brands = [];
+                        $products = $api->objects->getFullObjectsListByClass($_GET['cat'], 12);
+                        foreach ($products as $product) {
+                            $brands[] = $product['Брэнд'];
                         }
 
-                        $out[] = '<option value="'.$v.'"'.($selected ? ' selected':'').'>'.$v.'</option>';
+                        $brands = array_unique($brands);
                     }
-                    echo join("\n", $out);
-                }
-                ?>
-            </select>
-        </form>
+
+
+
+                    if (!empty($brands))
+                    {
+                        $out = array();
+                        foreach($brands as $v)
+                        {
+                            $selected = false;
+
+                            # Сравнение брэнда
+                            if (!empty($_GET['brand']) && ($_GET['brand'] == $v))
+                            {
+                                $selected = true;
+                                $brand = $v;
+                            }
+
+                            $out[] = '<option value="'.$v.'"'.($selected ? ' selected':'').'>'.$v.'</option>';
+                        }
+                        echo join("\n", $out);
+                    }
+                    ?>
+                </select>
+            </form>
+        </div>
 	<?
 		# СООБЩЕНИЕ ОБ ОШИБКЕ
 		$error_msg = '<div style="padding:50px; text-align:center; font-style:italic;">По вашему запросу ничего не найдено</div>';
@@ -100,7 +100,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 		    $brand = $_GET['brand'];
 
 
-			echo '<h1>'.$cat['name'].'</h1>';
+			echo '<h1 style="margin-top:50px;">'.$cat['name'].'</h1>';
 
 			# Количество товаров
 			$elements_count = $api->objects->getObjectsCount($cat['id'], 12, "AND o.active='1'".($brand != 'all' ? " AND c.field_32='$brand'" : ''));
@@ -156,9 +156,17 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 			echo '<h1>Результаты поиска</h1>';
 
 			$code = $api->db->prepare($_POST['code']);
+            $search_elements = $api->objects->getFullObjectsListByClass(
+                    -1,
+                    12,
+                    "AND o.active='1' 
+                    AND (c.field_31 LIKE '$code' 
+                    OR c.field_33 LIKE '%$code%'
+                    OR c.field_32 LIKE '%$code%') 
+                    ORDER BY o.sort DESC");
 
 			# Ищем по номеру
-			if($search_elements = $api->objects->getFullObjectsListByClass(-1, 12, "AND o.active='1' AND c.field_31 LIKE '$code' ORDER BY o.sort DESC"))
+			if(!empty($search_elements))
 			{
 				$out = array();
 				$mothers = array();
