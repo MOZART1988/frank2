@@ -86,7 +86,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 				</div>
 			</div>
 			<div align="right">
-				'.(isset($_SESSION['rycle']) && array_key_exists($item['id'],$_SESSION['rycle'])?'<a href="/ru/rycle/" class="order_btn">Перейти в корзину</a>':'<input type="button" class="order_btn itemBuy" data-id="'.$item['id'].'" '.($item['Цена'] == 0?'style="display:none;"':'').' value="Купить">').'
+				'.(isset($_SESSION['rycle']) && array_key_exists($item['id'],$_SESSION['rycle'])?'<a href="/ru/rycle/" class="order_btn">Корзина</a>':'<input type="button" class="order_btn itemBuy" data-id="'.$item['id'].'" '.($item['Цена'] == 0?'style="display:none;"':'').' value="Купить">').'
 			</div>';
 
 		}
@@ -132,7 +132,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 									<div class="cat_element_coast">Цена ............ '.number_format($o['Цена'], 0, '.', ' ').' тг</div>
 								</div>
 								<div class="cat_element_btn">
-									'.(isset($_SESSION['rycle']) && array_key_exists($o['id'],$_SESSION['rycle'])?'<a class="cat_element_btn_buy" href="/ru/rycle/">Перейти в корзину</a>':'<a class="cat_element_btn_buy itemBuy" href="#" data-id="'.$o['id'].'" '.($o['Цена'] == 0?'style="display:none;"':'').'>Купить</a>').'
+									'.(isset($_SESSION['rycle']) && array_key_exists($o['id'],$_SESSION['rycle'])?'<a class="cat_element_btn_buy" href="/ru/rycle/">Корзина</a>':'<a class="cat_element_btn_buy itemBuy" href="#" data-id="'.$o['id'].'" '.($o['Цена'] == 0?'style="display:none;"':'').'>Купить</a>').'
 								</div>
 							</div>
 							<div class="cat_element_tb"></div>

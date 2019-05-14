@@ -7,4 +7,12 @@
 			unset($_SESSION['Сумма']);
 		}
 	}
+
+    $total_summ = 0;
+
+    foreach ($_SESSION['rycle'] as $item => $keys) {
+        $total_summ += intval($keys['Цена']);
+    }
+
+    $_SESSION['Сумма'] = $total_summ;
 ?>

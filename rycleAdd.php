@@ -18,10 +18,8 @@
     $total_summ = 0;
 
     foreach ($_SESSION['rycle'] as $item => $keys) {
-        $total_sum += intval($keys['Цена']);
+        $total_summ += intval($keys['Цена']);
     }
 
-    if(!isset($_SESSION['Сумма'])) {
-        $_SESSION['Сумма'] = $total_sum;
-    }
+    $_SESSION['Сумма'] = $total_summ;
 ?>

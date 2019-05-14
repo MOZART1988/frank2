@@ -145,8 +145,10 @@ $(function()
        count = count < 1 ? 1 : count;
        $input.val(count);
 	   $('.table-basket-total-right span').text(total_sum + ' тг');
+	   $('.sum span').text(total_sum);
        $input.change();
        return false;
+
     });
 	$('.plus').click(function () {
 	    var $input = $(this).parent().find('.quantily');
@@ -155,7 +157,10 @@ $(function()
 	    $input.change();
 	    var price = parseInt($(this).attr('price'));
 	    var total_sum = parseInt($('.table-basket-total-right span').text()) + price;
+
 	    $('.table-basket-total-right span').text(total_sum + ' тг');
+	    $('.sum span').text(total_sum);
+
 	    $.ajax({
 	    	url: '/rycleChange.php',
 	    	data: "sum="+total_sum+"&id="+$(this).attr('data-id')+"&action=plus",
