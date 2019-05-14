@@ -100,7 +100,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 		    $brand = $_GET['brand'];
 
 
-			echo '<h1 style="margin-top:50px;">'.$cat['name'].'</h1>';
+			echo '<h1 class="catalog-title">'.$cat['name'].'</h1>';
 
 			# Количество товаров
 			$elements_count = $api->objects->getObjectsCount($cat['id'], 12, "AND o.active='1'".($brand != 'all' ? " AND c.field_32='$brand'" : ''));
@@ -209,7 +209,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 		# НОВИНКИ
 		else
 		{
-			echo '<h1 styke="margin-top:50px;">Новинки</h1>';
+			echo '<h1 class="catalog-title">Новинки</h1>';
 			if ($new_elements = $api->objects->getFullObjectsListByClass(-1, 12, "AND o.active='1' AND c.field_36='1' ORDER BY o.sort DESC"))
 			{
 				$out = array();

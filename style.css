@@ -1716,3 +1716,17 @@ position: absolute;
   	height: 160px!important;
   }
 }
+
+@media screen and (max-width: 860px) {
+  #brand_filter_form {
+      float: none!important;
+  }
+
+  .catalog-title {
+      margin-top: 15px!important;
+  }
+}
+
+.catalog-title {
+    margin-top: 50px;
+}
