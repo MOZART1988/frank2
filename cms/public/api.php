@@ -295,7 +295,9 @@ public $languages;
             $out[] = "<div class='review'>
                         <div class='name'>{$item['Имя']}</div>
                         <div class='review-text'>{$item['Текст']}</div>
-                    </div>";
+                    </div>
+                    <hr class='dotted'>
+                    ";
         }
 
         if (empty($out)) {

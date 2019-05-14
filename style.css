@@ -1730,3 +1730,20 @@ position: absolute;
 .catalog-title {
     margin-top: 50px;
 }
+
+.reviews-wrapper {
+  margin-top: 15px;
+}
+
+.review .name {
+  font-style: italic;
+  font-weight: 700;
+}
+
+.reviews {
+  margin-top:5px;
+}
+
+.full_item {
+  margin-top: 50px;
+}

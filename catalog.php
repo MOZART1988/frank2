@@ -156,7 +156,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 		# ПОИСК ПО НОМЕРУ
 		else if (!empty($_POST['code']))
 		{
-			echo '<h1>Результаты поиска</h1>';
+			echo '<h1 class="catalog-title">Результаты поиска</h1>';
 
 			$code = $api->db->prepare($_POST['code']);
             $search_elements = $api->objects->getFullObjectsListByClass(
