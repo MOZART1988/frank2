@@ -89,6 +89,9 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 				'.(isset($_SESSION['rycle']) && array_key_exists($item['id'],$_SESSION['rycle'])?'<a href="/ru/rycle/" class="order_btn">Корзина</a>':'<input type="button" class="order_btn itemBuy" data-id="'.$item['id'].'" '.($item['Цена'] == 0?'style="display:none;"':'').' value="Купить">').'
 			</div>';
 
+
+			echo $api->getReviews($item_id);
+
 		}
 		# КАТАЛОГ
 		else if (

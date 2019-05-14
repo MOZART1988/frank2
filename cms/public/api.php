@@ -279,6 +279,35 @@ public $languages;
 		';
 	}
 
+	#ОТЗЫВЫ В ЭЛЕМЕНТЕ КАТАЛОГА
+
+	public function getReviews($catalogItemId)
+    {
+        $items = $this->objects->getFullObjectsListByClass($catalogItemId, 13);
+
+        if (!$items) {
+            return false;
+        }
+
+        $out = [];
+
+        foreach ($items as $item) {
+            $out[] = "<div class='review'>
+                        <div class='name'>{$item['Имя']}</div>
+                        <div class='review-text'>{$item['Текст']}</div>
+                    </div>";
+        }
+
+        if (empty($out)) {
+            return false;
+        }
+
+        return '<div class="reviews-wrapper">
+                    <h3>Отзывы</h3>
+                    <div class="reviews">'.implode("\n", $out).'</div>
+                </div>';
+    }
+
 	# ВЕРХНЕЕ МЕНЮ
 	function topMenu()
 	{
