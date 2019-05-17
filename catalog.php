@@ -3,6 +3,7 @@ include('cms/public/api.php');
 $api->header(array('page-title'=>'Каталог продукции'));
 
 $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p3'));
+$brandsGlobal = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p3'));
 
 ?>
     <table width="100%" cellpadding="0" cellspacing="0">
@@ -31,7 +32,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
                         $brands = [];
                         $products = $api->objects->getFullObjectsListByClass($_GET['cat'], 12);
                         foreach ($products as $product) {
-                            $brands[] = $product['Брэнд'];
+                            $brands[] = is_numeric($product['Брэнд']) ? $brandsGlobal[$product['Брэнд']] : $product['Брэнд'];
                         }
 
                         $brands = array_unique($brands);
@@ -76,7 +77,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 				<div class="cat_full_main">
 					<div><span class="cat_full_code">'.$item['Номер'].'</div>
 					<div class="cat_full_name">'.$item['Название'].'</div>
-					<div class="cat_full_brand">'.$item['Брэнд'].'</div>
+					<div class="cat_full_brand">'.(isset($brands[$item['Брэнд']]) ? $brands[$item['Брэнд']] : $item['Брэнд']) .'</div>
 					<div class="cat_mini_desc">'.$item['Мини описание'].'</div>
 					<div class="page_coast">Цена:&nbsp;'.$item['Цена'].'&nbsp;тг</div>
 				</div>
@@ -102,11 +103,17 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 
 		    $brand = $_GET['brand'];
 
+		    $brandId = array_search($brand, $brandsGlobal, true);
+
+		    if ($brandId === -1) {
+		        $brandId = 0;
+            }
+
 
 			echo '<h1 class="catalog-title">'.$cat['name'].'</h1>';
 
 			# Количество товаров
-			$elements_count = $api->objects->getObjectsCount($cat['id'], 12, "AND o.active='1'".($brand != 'all' ? " AND c.field_32='$brand'" : ''));
+			$elements_count = $api->objects->getObjectsCount($cat['id'], 12, "AND o.active='1'".($brand != 'all' ? " AND (c.field_32='$brand' OR c.field_32='$brandId')" : ''));
 
 			if ($elements_count > 0)
 			{
@@ -114,7 +121,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 				$pages = $api->pages($elements_count, 9, 5, array(), $_SERVER['PHP_SELF'].'?cat='.$cat['id'].'&brand='.$brand.'&pg=#pg#');
 
 				# Получаем страницу товаров
-				if($cat_elements = $api->objects->getFullObjectsListByClass($cat['id'], 12, "AND o.active='1'".($brand != 'all' ? " AND c.field_32='$brand'" : '')." ORDER BY c.field_46 ASC LIMIT ".$pages['start'].", 9"))
+				if($cat_elements = $api->objects->getFullObjectsListByClass($cat['id'], 12, "AND o.active='1'".($brand != 'all' ? " AND (c.field_32='$brand' OR c.field_32='$brandId')" : ''). " ORDER BY c.field_46 ASC LIMIT ".$pages['start'].", 9"))
 				{
 					$out = array();
 					foreach($cat_elements as $o)
@@ -124,7 +131,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 							<div class="cat_element_tb"></div>
 							<div class="cat_element_c">
 								<div class="cat_element_in">
-									<div>'.$o['Брэнд'].'</div>
+									<div>'.(isset($brandsGlobal[$o['Брэнд']]) ? $brandsGlobal[$o['Брэнд']] : $o['Брэнд']).'</div>
 								</div>
 								<div class="cat_element_img">
 									<a href="'.$_SERVER['PHP_SELF'].'?cat='.$o['head'].'&item='.$o['id'].'"><img src="'._IMG_.'?url='._UPLOADS_.'/'.$o['Изображение'].'&h=180&type=square" /></a>
@@ -186,7 +193,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 						<div class="cat_element_tb"></div>
 						<div class="cat_element_c">
 							<div class="cat_element_in">
-								<div>'.$o['Брэнд'].'</div>
+								<div>'.(isset($brands[$o['Брэнд']]) ? $brands[$o['Брэнд']] : $o['Брэнд']).'</div>
 								<div><a href="/catalog.php?cat='.$mothers[$o['head']]['id'].'">'.$mothers[$o['head']]['name'].'</a></div>
 							</div>
 							<div class="cat_element_img">
@@ -231,7 +238,7 @@ $brands = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 1", 'p
 						<div class="cat_element_tb"></div>
 						<div class="cat_element_c">
 							<div class="cat_element_in">
-								<div>'.$o['Брэнд'].'</div>
+								<div>'.(isset($brands[$o['Брэнд']]) ? $brands[$o['Брэнд']] : $o['Брэнд']).'</div>
 								<div><a href="/catalog.php?cat="></a></div>
 							</div>
 							<div class="cat_element_img">
