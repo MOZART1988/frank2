@@ -425,7 +425,7 @@ public $languages;
 
         }
 		
-		return '<div id="cat_menu" class="open"><a href="#" class="cat_menu_btn">каталог</a> '.join("\n", $out).'</div>';
+		return '<div id="cat_menu" ><a href="#" class="cat_menu_btn">каталог</a> '.join("\n", $out).'</div>';
 	}
 	/*
 	function catMenu()

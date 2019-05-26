@@ -15,7 +15,7 @@ $brandsGlobal = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 
 
 	<td style="padding-left:15px;">
         <div class="forms" style="margin-top: 10px">
-            <form id="searchincat_form" style="width: 30%; float: left;" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
+            <form class="search-form-styled" id="searchincat_form" style="width: 30%; float: left;" action="<?=$_SERVER['PHP_SELF']?>" method="POST">
                 <div id="searchincat_input">
                     <input type="text" name="code" value="<?=(!empty($_POST['code']) ? $api->db->prepare($_POST['code']) : 'Поиск по товарам')?>" title="Поиск по товарам" class="needClear" />
                     <input type="submit" value="" />
@@ -77,18 +77,19 @@ $brandsGlobal = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 
 				<div class="cat_full_main">
 					<div><span class="cat_full_code">'.$item['Номер'].'</div>
 					<div class="cat_full_name">'.$item['Название'].'</div>
-					<div class="cat_full_brand">'.(isset($brands[$item['Брэнд']]) ? $brands[$item['Брэнд']] : $item['Брэнд']) .'</div>
+					<div class="cat_full_brand">'.(isset($brandsGlobal[$item['Брэнд']]) ? $brandsGlobal[$item['Брэнд']] : $item['Брэнд']) .'</div>
 					<div class="cat_mini_desc">'.$item['Мини описание'].'</div>
 					<div class="page_coast">Цена:&nbsp;'.$item['Цена'].'&nbsp;тг</div>
+					<div class="buy-button">
+				        '.(isset($_SESSION['rycle']) && array_key_exists($item['id'],$_SESSION['rycle'])?'<a href="/ru/rycle/" class="order_btn">Корзина</a>':'<input type="button" class="order_btn itemBuy" data-id="'.$item['id'].'" '.($item['Цена'] == 0?'style="display:none;"':'').' value="Купить">').'
+			        </div>
 				</div>
 				<div class="clear"></div>
 				<div class="cat_full_text">
 					'.$item['Описание'].'
 				</div>
 			</div>
-			<div align="right">
-				'.(isset($_SESSION['rycle']) && array_key_exists($item['id'],$_SESSION['rycle'])?'<a href="/ru/rycle/" class="order_btn">Корзина</a>':'<input type="button" class="order_btn itemBuy" data-id="'.$item['id'].'" '.($item['Цена'] == 0?'style="display:none;"':'').' value="Купить">').'
-			</div>';
+			';
 
 
 			echo $api->getReviews($item_id);
