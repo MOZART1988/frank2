@@ -411,7 +411,7 @@ public $languages;
             if (!empty($subcats)) {
                 $out[] = '
 				<div class="cat_menu_element'.($setcat ? ' setcat' : '').'">
-					<a class="catalog_lnk" href="#" title="'.$cat['name'].'">'.$cat['name'].'</a>
+					<a class="catalog_lnk" href="/catalog.php?cat='.$cat['id'].'&brand=all" title="'.$cat['name'].'">'.$cat['name'].'</a>
 					<ul class="subcats '.($_GET['cat'] === $cat['id'] ? 'active' : '').'"'.($setcat ? ' style="display:block"' : '').'>'.join("\n", $subcats).'</ul>
 				</div>';
             } else {

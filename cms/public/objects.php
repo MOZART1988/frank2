@@ -13,12 +13,12 @@ class objects extends appends{
 		$this->last = null;
 		$this->lang = &$lang;
 	}
-	#бшанпйю цпсоош назейрнб хг пндхрекъ (0 - ЙНПЕМЭ), БРНПШЛ ОЮПЮЛЕРПНБ НЦПЮМХВХБЮЕРЯЪ КХЛХР БШАНПЙХ (SQL)
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ (0 - О©╫О©╫О©╫О©╫О©╫О©╫), О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ (SQL)
 	function getObjectsList($head, $limit=false){
 		if(!is_numeric($head) || !($list = $this->db->select("objects as o1", "LEFT JOIN objects as o2 ON o2.head=o1.id WHERE o1.active='1' AND o1.head='".$head."' GROUP BY o1.id ORDER BY sort,id".($limit?' LIMIT '.$limit:''), "o1.*, COUNT(o2.id) as inside"))) return array();
 		return $list;
 	}
-	#бшанпйю цпсоош назейрнб хг пндхрекъ я онкълх гмювемхи назейрнб
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 	function getFullObjectsList($head, $limit=false){
 		if(!is_numeric($head) || !($list = $this->getObjectsList($head, $limit))) return array();
 		$out = array();
@@ -28,23 +28,32 @@ class objects extends appends{
 		}
 		return $out;
 	}
-	#бшанпйю йнкхвеярбю назейрнб хг пндхрекъ я гюдюммшл йкюяянл
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 	function getObjectsCount($head, $class_id, $sql="AND o.active='1'"){
-		$sql = "WHERE ".(!!$class_id ? "c.lang='".$this->lang."' AND ":'').($head != -1 ? "o.head='".$head."' AND " : '')."o.class_id='".$class_id."'".(@$sql?" ".$sql:'');
+
+	    if (is_array($head)) {
+	        $head = join(",", $head);
+        }
+
+		$sql = "WHERE ".(!!$class_id ? "c.lang='".$this->lang."' AND ":'').($head != -1 ? "o.head IN (".$head.") AND " : '')."o.class_id='".$class_id."'".(@$sql?" ".$sql:'');
 		if(!!$class_id) $sql = "LEFT JOIN class_".$class_id." as c ON o.id=c.object_id ".$sql;
-		if(!is_numeric($head) || !is_numeric($class_id) || !($count = $this->db->count("objects as o", $sql)) ) return 0;
+		if(!is_numeric($class_id) || !($count = $this->db->count("objects as o", $sql)) ) return 0;
 		return $count;
 	}
-	#бшанпйю цпсоош назейрнб хг пндхрекъ я гюдюммшл йкюяянл, БНГЛНФМЮ ЯНПРХПНБЙЮ ОН ОНКЪЛ ЙКЮЯЯЮ
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫, О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫
 	function getObjectsListByClass($head, $class_id, $sql="AND o.active='1' ORDER BY o.sort"){
-		$sql = "WHERE ".(!!$class_id ? "c.lang='".$this->lang."' AND ":'').($head != -1 ? "o.head='".$head."' AND " : '')."o.class_id='".$class_id."'".(@$sql?" ".$sql:'');
+        if (is_array($head)) {
+            $head = join(",", $head);
+        }
+
+		$sql = "WHERE ".(!!$class_id ? "c.lang='".$this->lang."' AND ":'').($head != -1 ? "o.head IN (".$head.") AND " : '')."o.class_id='".$class_id."'".(@$sql?" ".$sql:'');
 		if(!!$class_id) $sql = "LEFT JOIN class_".$class_id." as c ON o.id=c.object_id ".$sql;
-		if(!is_numeric($head) || !is_numeric($class_id) || !($list = $this->db->select("objects as o", $sql, "o.*")) ) return array();
+		if(!is_numeric($class_id) || !($list = $this->db->select("objects as o", $sql, "o.*")) ) return array();
 		return $list;
 	}
-	#бшанпйю цпсоош назейрнб хг пндхрекъ я гюдюммшл йкюяянл ян гмювемхълх онкеи назейрнб
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 	function getFullObjectsListByClass($head, $class_id, $sql="AND o.active=1 ORDER BY o.sort"){
-		if(!is_numeric($head) || !($list = $this->getObjectsListByClass($head, $class_id, $sql))) return array();
+		if(!($list = $this->getObjectsListByClass($head, $class_id, $sql))) return array();
 		$out = array();
 		if (!empty($list['id']) && !empty($list['class_id'])) return $list+$this->getObjectFields($list['id'], $list['class_id']);
 		foreach($list as $o){
@@ -52,18 +61,18 @@ class objects extends appends{
 		}
 		return $out;
 	}
-	#бшанпйю ндмнцн назейрю я гюдюммшл ID, БРНПШЛ ОЮПЮЛЕРПНЛ СЙЮГШБЮЕРЯЪ ГЮОНЛМХРЯЪ КХ ID ДЮММНЦН НАЗЕЙРЮ Б ОЕПЕЛЕММНИ $this->last ХКХ МЕР.
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ ID, О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ ID О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ $this->last О©╫О©╫О©╫ О©╫О©╫О©╫.
 	function getObject( $id, $remember=true ){
 		if(!is_numeric($id) || !($obj = $this->db->select("objects as o1", "LEFT JOIN objects as o2 ON o2.head=o1.id WHERE o1.id='".$id."' GROUP BY o1.id LIMIT 1", "o1.*, COUNT(o2.id) as inside"))) return false;
 		if(!!$remember) $this->last = $obj['id'];
 		return $obj;
 	}
-	#бшанпйю ндмнцн назейрю я гюдюммшл ID бйкчвюъ гмювемхъ онкеи
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ ID О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫
 	function getFullObject( $id, $remember=true ){
 		if(!is_numeric($id) || !($obj = $this->getObject( $id, $remember ))) return false;
 		return $obj+$this->getObjectFields($obj['id'], $obj['class_id']);
 	}
-	#бшанпйю гмювемхи онкеи назейрю он ID назейрю х ID йкюяяю
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ ID О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ ID О©╫О©╫О©╫О©╫О©╫О©╫
 	function getObjectFields($object_id, $class_id){
 		if(!$class_id) return array();
 		$fields = array();
@@ -77,16 +86,16 @@ class objects extends appends{
 		}
 		return $fields;
 	}
-	#бшанпйю онкеи йкюяяю, я яннрбеярбсчыхлх онкълх, йнрнпше гюйпеокемш гю онкълх (б рюакхже онкеи)
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫, О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫, О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ (О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫)
 	function getClassFields($class_id){
 		return $this->db->select('fields', "WHERE `class_id`='".$class_id."' ORDER BY sort");
 	}
-	#янгдюмхе назейрю х онкеи ндмхл лернднл
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 	function createObjectAndFields($object, $fields){
 		if( empty($object['name']) || !is_numeric($object['class_id']) ) return false;
 		return $this->createObjectFields( $this->createObject($object), $fields );
 	}
-	#янгдюмхе назейрю
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 	function createObject($object){
 		if(empty($object['sort'])) $object['sort'] = time();
 		if(!isset($object['active'])) $object['active'] = 1;
@@ -95,7 +104,7 @@ class objects extends appends{
 		}
 		return false;
 	}
-	#янгдюмхе онкеи назейрю
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 	function createObjectFields($object_id, $fields){
 		if(!$object = $this->db->select("objects", "WHERE `id`='".$object_id."' LIMIT 1")) return false;
 		
@@ -117,17 +126,17 @@ class objects extends appends{
 		if( $this->db->insert("class_".$object['class_id'], $out) ) return $object_id;
 		return false;
 	}
-	#педюйрхпнбюмхе назейрю х онкеи ндмнбпелеммн
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 	function editObjectAndFields($object, $fields){
 		if( !isset($object['id']) || !is_numeric($object['class_id'])) return false;
 		return ( $this->editObject($object) && $this->editObjectFields($object['id'], $fields) );
 	}
-	#педюйрхпнбюмхе назейрю
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 	function editObject($object){
 		if( empty($object['id']) ) return false;
 		return $this->db->update("objects", $object, "WHERE `id`='".$object['id']."'");
 	}
-	#педюйрхпнбюмхе онкеи назейрю
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 	function editObjectFields($object_id, $fields){
 		if(!$object = $this->db->select("objects", "WHERE `id`='".$object_id."' LIMIT 1")) return false;
 		
@@ -146,24 +155,24 @@ class objects extends appends{
 		}
 		$out['object_id'] = $object['id'];
 		$out['lang'] = $this->lang;
-		#опнбепъел еярэ гюохяэ б онкъу с йкюяяю назейрю, еякх мер гмювхр опх педюрхпнбюмхх йкюяя ашк хглемем
+		#О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫, О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 		if( $langs = $this->db->select('class_'.$object['class_id'], "WHERE `object_id`='".$object['id']."'", 'lang') ){
-			#йкюяя ме лемъкх, мсфмн опнбепхрэ еярэ кх хмрепеямши мюл ъгшй хкх мсфмн ецн янгдюрэ
-			#ъгшй еярэ, янупюмъел онкъ
+			#О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫, О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫
+			#О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫, О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫
 			if( !!in_array($this->lang, $langs) )	return $this->db->update('class_'.$object['class_id'], $out, "WHERE `object_id`='".$object['id']."' AND `lang`='".$this->lang."'");
 			else return $this->db->insert('class_'.$object['class_id'], $out);
 		}else{
-			#йкюяя лемъкх, ясвйх!
-			#вхярхл бяе йкюяяш нр бнглнфмнцн опхясрярбхъ назейрю
+			#О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫, О©╫О©╫О©╫О©╫О©╫!
+			#О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 			foreach($this->db->select("classes", "ORDER BY id") as $c){
 				$this->db->delete('class_'.$c['id'], "WHERE `object_id`='".$object['id']."'");
 			}
 			
-			#днаюбкъел мнбсч гюохяэ я онкълх б рюакхжс йкюяяю
+			#О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫
 			return $this->db->insert('class_'.$object['class_id'], $out);
 		}
 	}
-	#янпрхпнбйю назейрю
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫
 	function sortObject($id, $to='up'){
 	
 		if(!is_numeric($id) || !in_array($to, array("up", "down"))) return false;
@@ -178,7 +187,7 @@ class objects extends appends{
 		$this->db->update('objects', array_merge($downer, array("sort"=>$obj['sort'])), "WHERE `id`='".$downer['id']."'");
 		return true;
 	}
-	#нопедекемхе HTML-йндю онкъ он рхос
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ HTML-О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫
 	function getFieldInput($k, $f){
 		switch( $f['type'] ){
 			case 'text': return '<input type="text" name="fields['.$k.']" value="'.(@$f['value']?$f['value']:'').'" style="width:'.$f['p1'].'px;">';
@@ -193,7 +202,7 @@ class objects extends appends{
 			default: return '<input type="text" name="fields['.$k.']" value="'.(@$f['value']?$f['value']:'').'" style="width:'.$f['p1'].'px;">';
 		}
 	}
-	#пейспяхбмне сдюкемхе назейрю х бяеу ецн онрнлйнб (я сдюкемхел гмювемхи онкеи бяеу ъгшйнбшу бепяхи)
+	#О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ (О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫)
 	function deleteObject($id){
 		if(!!($object = $this->db->select("objects", "WHERE `id`='".$id."' LIMIT 1"))){ 
 			$this->db->delete("class_".$object['class_id'], "WHERE `object_id`='".$object['id']."'");

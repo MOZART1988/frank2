@@ -114,7 +114,25 @@ $brandsGlobal = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 
 			echo '<h1 class="catalog-title">'.$cat['name'].'</h1>';
 
 			# Количество товаров
-			$elements_count = $api->objects->getObjectsCount($cat['id'], 12, "AND o.active='1'".($brand != 'all' ? " AND (c.field_32='$brand' OR c.field_32='$brandId')" : ''));
+
+            $head = $cat['id'];
+
+            $category = $api->objects->getFullObject($cat['id']);
+
+            /**
+             * Если родитель категории - рутовый то надо взять все подкатегории
+            */
+
+            if ((int)$category['head'] === 27) {
+                $subCategories = $api->objects->getFullObjectsList($cat['id']);
+                $head = [];
+                foreach($subCategories as $item) {
+                    $head[] = $item['id'];
+                }
+            }
+
+
+			$elements_count = $api->objects->getObjectsCount($head, 12, "AND o.active='1'".($brand != 'all' ? " AND (c.field_32='$brand' OR c.field_32='$brandId')" : ''));
 
 			if ($elements_count > 0)
 			{
@@ -122,7 +140,7 @@ $brandsGlobal = explode("\n", $api->db->select("`fields`", "WHERE id='32' LIMIT 
 				$pages = $api->pages($elements_count, 9, 5, array(), $_SERVER['PHP_SELF'].'?cat='.$cat['id'].'&brand='.$brand.'&pg=#pg#');
 
 				# Получаем страницу товаров
-				if($cat_elements = $api->objects->getFullObjectsListByClass($cat['id'], 12, "AND o.active='1'".($brand != 'all' ? " AND (c.field_32='$brand' OR c.field_32='$brandId')" : ''). " ORDER BY c.field_46 ASC LIMIT ".$pages['start'].", 9"))
+				if($cat_elements = $api->objects->getFullObjectsListByClass($head, 12, "AND o.active='1'".($brand != 'all' ? " AND (c.field_32='$brand' OR c.field_32='$brandId')" : ''). " ORDER BY c.field_46 ASC LIMIT ".$pages['start'].", 9"))
 				{
 					$out = array();
 					foreach($cat_elements as $o)
